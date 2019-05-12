@@ -73,11 +73,11 @@ void GSTextureCache::RemovePartial()
 {
 	//m_src.RemoveAll();
 
-	for (int type = 0; type < 2; type++)
+	for (auto & type : m_dst)
 	{
-		for (auto t : m_dst[type]) delete t;
+		for (auto t : type) delete t;
 
-		m_dst[type].clear();
+		type.clear();
 	}
 }
 
@@ -85,11 +85,11 @@ void GSTextureCache::RemoveAll()
 {
 	m_src.RemoveAll();
 
-	for(int type = 0; type < 2; type++)
+	for(auto & type : m_dst)
 	{
-		for (auto t : m_dst[type]) delete t;
+		for (auto t : type) delete t;
 
-		m_dst[type].clear();
+		type.clear();
 	}
 
 	m_palette_map.Clear();
@@ -818,10 +818,9 @@ void GSTextureCache::InvalidateVideoMem(GSOffset* off, const GSVector4i& rect, b
 
 	if(!target) return;
 
-	for(int type = 0; type < 2; type++)
+	for(auto & list : m_dst)
 	{
-		auto& list = m_dst[type];
-		for(auto i = list.begin(); i != list.end(); )
+			for(auto i = list.begin(); i != list.end(); )
 		{
 			auto j = i++;
 			Target* t = *j;
@@ -1097,10 +1096,9 @@ void GSTextureCache::IncAge()
 	// Original maxage was 4 here, Xenosaga 2 needs at least 240, else it flickers on scene transitions.
 	maxage = 400; // ffx intro scene changes leave the old image untouched for a couple of frames and only then start using it
 
-	for(int type = 0; type < 2; type++)
+	for(auto & list : m_dst)
 	{
-		auto& list = m_dst[type];
-		for(auto i = list.begin(); i != list.end(); )
+			for(auto i = list.begin(); i != list.end(); )
 		{
 			Target* t = *i;
 
