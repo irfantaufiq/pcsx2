@@ -33,7 +33,7 @@ private:
 	void DoInterlace(GSTexture* sTex, GSTexture* dTex, int shader, bool linear, float yoffset = 0) {}
 
 public:
-	GSDeviceNull() {}
+	GSDeviceNull() = default;
 
 	bool Create(const std::shared_ptr<GSWnd> &wnd);
 	bool Reset(int w, int h);
