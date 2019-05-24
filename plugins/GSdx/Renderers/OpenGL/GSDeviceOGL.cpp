@@ -1449,10 +1449,10 @@ void GSDeviceOGL::DoMerge(GSTexture* sTex[3], GSVector4* sRect, GSTexture* dTex,
 		if (PMODE.MMOD == 1) {
 			// Blend with a constant alpha
 			m_merge_obj.cb->cache_upload(&c.v);
-			StretchRect(sTex[0], sRect[0], dTex, dRect[0], m_merge_obj.ps[1], m_MERGE_BLEND, 0);
+			StretchRect(sTex[0], sRect[0], dTex, dRect[0], m_merge_obj.ps[1], m_MERGE_BLEND, 0xF);
 		} else {
 			// Blend with 2 * input alpha
-			StretchRect(sTex[0], sRect[0], dTex, dRect[0], m_merge_obj.ps[0], m_MERGE_BLEND, 0);
+			StretchRect(sTex[0], sRect[0], dTex, dRect[0], m_merge_obj.ps[0], m_MERGE_BLEND, 0xF);
 		}
 	}
 
