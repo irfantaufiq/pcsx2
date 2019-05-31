@@ -1267,10 +1267,10 @@ void GSDeviceOGL::StretchRect(GSTexture* sTex, const GSVector4& sRect, GSTexture
 
 void GSDeviceOGL::StretchRect(GSTexture* sTex, const GSVector4& sRect, GSTexture* dTex, const GSVector4& dRect, GLuint ps, bool linear)
 {
-	StretchRect(sTex, sRect, dTex, dRect, ps, m_NO_BLEND, linear);
+	StretchRect(sTex, sRect, dTex, dRect, ps, m_NO_BLEND, OMColorMaskSelector(), linear);
 }
 
-void GSDeviceOGL::StretchRect(GSTexture* sTex, const GSVector4& sRect, GSTexture* dTex, const GSVector4& dRect, GLuint ps, int bs, int cms, bool linear)
+void GSDeviceOGL::StretchRect(GSTexture* sTex, const GSVector4& sRect, GSTexture* dTex, const GSVector4& dRect, GLuint ps, int bs, OMColorMaskSelector cms, bool linear)
 {
 	if(!sTex || !dTex)
 	{
@@ -1312,7 +1312,7 @@ void GSDeviceOGL::StretchRect(GSTexture* sTex, const GSVector4& sRect, GSTexture
 		OMSetRenderTargets(dTex, NULL);
 
 	OMSetBlendState((uint8)bs);
-	OMSetColorMaskState();
+	OMSetColorMaskState(cms);
 
 	// ************************************
 	// ia
