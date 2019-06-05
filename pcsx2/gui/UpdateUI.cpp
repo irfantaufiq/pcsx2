@@ -40,10 +40,27 @@ void MainEmuFrame::SetMenuItemLabel(int id, wxString str)
 
 static void _SaveLoadStuff(bool enabled)
 {
+	wxString loadSlotName, loadSlotNameTag = "";
+	wxDateTime loadSlotDate_j, loadSlotDate = wxInvalidDateTime;
+	int loadLatestSlot = 10;
+
 	sMainFrame.EnableMenuItem(MenuId_Sys_LoadStates, enabled);
 	sMainFrame.EnableMenuItem(MenuId_Sys_SaveStates, enabled);
 
 #ifdef USE_NEW_SAVESLOTS_UI
+	// Get the latest savestate slot
+	loadSlotDate = loadSlotDate.SetYear(1970);
+	for (int j = 0; j < 10; j++)
+	{
+		loadSlotDate_j = saveslot_cache[j].GetTimestamp();
+		if (loadSlotDate_j.IsValid() && !(loadSlotDate_j.IsEarlierThan(loadSlotDate)))
+		{
+			loadSlotDate = loadSlotDate_j;
+			loadLatestSlot = j;
+		}
+	}
+	
+
 	// Run though all the slots.Update if they need updating or the crc changed.
 	for (int i = 0; i < 10; i++)
 	{
@@ -77,7 +94,12 @@ static void _SaveLoadStuff(bool enabled)
 			saveslot_cache[i].crc = ElfCRC;
 
 			sMainFrame.EnableMenuItem(load_menu_item, !saveslot_cache[i].empty);
-			sMainFrame.SetMenuItemLabel(load_menu_item, saveslot_cache[i].SlotName());
+
+			// set the tag/flag on latest slot name
+			if (i == loadLatestSlot) loadSlotNameTag = " <==";
+			else loadSlotNameTag = "";
+
+			sMainFrame.SetMenuItemLabel(load_menu_item, saveslot_cache[i].SlotName() + loadSlotNameTag);
 			sMainFrame.SetMenuItemLabel(save_menu_item, saveslot_cache[i].SlotName());
 		}
 
